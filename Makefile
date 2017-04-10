@@ -13,6 +13,6 @@ dependencies:
 	glide install
 
 test:
-	go test $(PKGS)
+	@go test -v $(PKGS) -cover -bench . -race
 
 .PHONY: get-deps install-glide dependencies test

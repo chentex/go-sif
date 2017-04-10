@@ -11,6 +11,7 @@ vendor
 # Architecture specific extensions/prefixes
 *.[568vq]
 [568vq].out
+glide.lock
 
 *.cgo1.go
 *.cgo2.c
