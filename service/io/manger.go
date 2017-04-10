@@ -1,47 +1,34 @@
 package io
 
 import (
-	"errors"
 	"io/ioutil"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 // Manager that exposes file operations
 type Manager interface {
-	Read() ([]string, error)
-	Save(content []string) error
+	Read(file string) ([]string, error)
+	Save(content []string, file string) error
 }
 
-// FileManager implementation for file manager
-type FileManager struct {
-	file string
-	line int
-}
+// fileManager implementation for file manager
+type fileManager struct{}
 
 // NewFileManager instances a new FileManager
-func NewFileManager(file string, line int) (*FileManager, error) {
-	if file == "" {
-		return nil, errors.New("File cannot be empty")
-	}
-
-	if line < 0 {
-		return nil, errors.New("Line cannot be negative")
-	}
-
-	return &FileManager{
-		file: file,
-		line: line,
-	}, nil
+func NewFileManager() Manager {
+	return &fileManager{}
 }
 
 // Read reads the complete file and returns an array of strings that represent each line
-func (f *FileManager) Read() ([]string, error) {
-	file, err := ioutil.ReadFile(f.file)
+func (f *fileManager) Read(file string) ([]string, error) {
+	fileBytes, err := ioutil.ReadFile(file)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "fileManager while reading file")
 	}
 
-	str := string(file)
+	str := string(fileBytes)
 
 	arr := strings.Split(str, "\n")
 
@@ -49,13 +36,13 @@ func (f *FileManager) Read() ([]string, error) {
 }
 
 // Save receives an array of strings and writes them to the file
-func (f *FileManager) Save(content []string) error {
+func (f *fileManager) Save(content []string, file string) error {
 	fullContent := strings.Join(content, "\n")
 	bytes := []byte(fullContent)
 
-	err := ioutil.WriteFile(f.file, bytes, 0666)
+	err := ioutil.WriteFile(file, bytes, 0666)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "fileManager while writing file")
 	}
 
 	return nil

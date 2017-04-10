@@ -9,29 +9,15 @@ import (
 )
 
 func TestNewFileManager(t *testing.T) {
-	type args struct {
-		file string
-		line int
-	}
 	tests := []struct {
-		name    string
-		args    args
-		want    *FileManager
-		wantErr bool
+		name string
+		want *fileManager
 	}{
-		{"newFileManager", args{"fixtures/testfile.txt", 0}, &FileManager{file: "fixtures/testfile.txt", line: 0}, false},
-		{"newFileManagerWithLine", args{"fixtures/testfile.txt", 10}, &FileManager{file: "fixtures/testfile.txt", line: 10}, false},
-		{"newFileManagerWithLine2", args{"testfile.txt", 1}, &FileManager{file: "testfile.txt", line: 1}, false},
-		{"newFileManagerNoFile", args{"", 1}, nil, true},
-		{"newFileManagerInvalidLine", args{"testfile.txt", -1}, nil, true},
+		{"newFileManager", &fileManager{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewFileManager(tt.args.file, tt.args.line)
-
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NewFileManager() error = %v, wantErr %v", err, tt.wantErr)
-			}
+			got := NewFileManager()
 
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewFileManager() = %v, want %v", got, tt.want)
@@ -43,7 +29,6 @@ func TestNewFileManager(t *testing.T) {
 func TestFileManager_Read(t *testing.T) {
 	type fields struct {
 		file string
-		line int
 	}
 	tests := []struct {
 		name    string
@@ -51,16 +36,13 @@ func TestFileManager_Read(t *testing.T) {
 		want    []string
 		wantErr bool
 	}{
-		{"1", fields{file: "fixtures/readfile.txt", line: 0}, []string{"test", "test 2"}, false},
-		{"2", fields{file: "testfile.txt", line: 0}, nil, true},
+		{"1", fields{file: "fixtures/readfile.txt"}, []string{"test", "test 2"}, false},
+		{"2", fields{file: "testfile.txt"}, nil, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			f := &FileManager{
-				file: tt.fields.file,
-				line: tt.fields.line,
-			}
-			got, err := f.Read()
+			f := &fileManager{}
+			got, err := f.Read(tt.fields.file)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("FileManager.Read() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -91,11 +73,8 @@ func TestFileManager_Save(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			f := &FileManager{
-				file: tt.fields.file,
-				line: tt.fields.line,
-			}
-			if err := f.Save(tt.args.content); (err != nil) != tt.wantErr {
+			f := &fileManager{}
+			if err := f.Save(tt.args.content, tt.fields.file); (err != nil) != tt.wantErr {
 				t.Errorf("FileManager.Save() error = %v, wantErr %v", err, tt.wantErr)
 			} else if err == nil {
 				bytes, _ := ioutil.ReadFile(tt.fields.file)
