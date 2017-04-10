@@ -6,7 +6,7 @@ all: get-deps test
 get-deps: install-glide dependencies
 
 install-glide:
-	mkdir -p $GOPATH/bin
+	mkdir -p $(GOPATH)/bin
 	curl https://glide.sh/get | sh
 
 dependencies:
