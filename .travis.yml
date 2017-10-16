@@ -1,9 +1,21 @@
+
 language: go
-
 go:
-  - 1.7
-  - 1.8
-
-install: make get-deps
-
-script: make test
+- 1.9
+install:
+- make install_dependencies
+script:
+- make test
+- make package-darwin
+- make package-linux
+deploy:
+  provider: releases
+  api_key:
+    secure: generatekey
+  file:
+    - build/dist/gosif.darwin-amd64.tar.gz
+    - build/dist/gosif.linux-amd64.tar.gz
+  skip_cleanup: true
+  on:
+    go: 1.9
+    tags: true

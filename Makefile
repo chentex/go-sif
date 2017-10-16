@@ -1,18 +1,52 @@
-PKGS = $$(go list ./... | grep -v /vendor/)
+# Meta info
+NAME := gosif
+VERSION := 0.1.0
+MAINTAINER := "Vicente Zepeda <chente.z.m@gmail.com"
+# LD Flags
+DATE := $(shell date -u +%Y%m%d.%H%M%S)
+COMMIT_ID := $(shell git rev-parse --short HEAD)
+GIT_REPO := $(shell git config --get remote.origin.url)
+# Go tools flags
+LD_FLAGS := -X github.com/chentex/go-sif/cmd.buildVersion=$(VERSION)
+LD_FLAGS += -X github.com/chentex/go-sif/cmd.buildCommit=$(COMMIT_ID)
+LD_FLAGS += -X github.com/chentex/go-sif/cmd.buildDate=$(DATE)
+EXTRA_BUILD_VARS := CGO_ENABLED=0 GOARCH=amd64
+SOURCE_DIRS := $(shell go list ./... | grep -v /vendor/)
 
 
-all: get-deps test
+all: install_dependencies test package-linux package-darwin
 
-get-deps: install-glide dependencies
+lint:
+	@go fmt $(SOURCE_DIRS)
+	@go vet $(SOURCE_DIRS)
 
-install-glide:
-	mkdir -p $(GOPATH)/bin
-	curl https://glide.sh/get | sh
+test: lint
+	 @go test -v $(SOURCE_DIRS) -cover -bench . -race
 
-dependencies:
+install_dependencies:
 	glide install
 
-test:
-	@go test -v $(PKGS) -cover -bench . -race
+cover:
+	gocov test $(SOURCE_DIRS) | gocov-html > coverage.html && open coverage.html
 
-.PHONY: get-deps install-glide dependencies test
+binaries: binary-darwin binary-linux
+
+binary-darwin:
+	@-rm -rf build/dist/darwin
+	@-mkdir -p build/dist/darwin
+	GOOS=darwin $(EXTRA_BUILD_VARS) go build -ldflags "$(LD_FLAGS)" -o build/dist/darwin/$(NAME)
+
+binary-linux:
+	@-rm -rf build/dist/linux
+	@-mkdir -p build/dist/linux
+	GOOS=linux $(EXTRA_BUILD_VARS) go build -ldflags "$(LD_FLAGS)" -o build/dist/linux/$(NAME)
+
+
+package-darwin: binary-darwin
+	@tar -czf build/dist/$(NAME).darwin-amd64.tar.gz -C build/dist/darwin $(NAME)
+
+
+package-linux: binary-linux
+	@tar -czf build/dist/$(NAME).linux-amd64.tar.gz -C build/dist/linux $(NAME)
+
+.PHONY: lint test install_dependencies cover binaries binary-darwin binary-linux package-darwin package-linux
