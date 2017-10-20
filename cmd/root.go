@@ -23,9 +23,8 @@ import (
 )
 
 var (
-	cfgFile string
-	file    string
-	line    int
+	cfgFile, file, text string
+	line                int
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -51,7 +50,8 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 	RootCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "The file where you want to insert the string")
-	RootCmd.PersistentFlags().IntVarP(&line, "line", "l", 0, "Line where the string is going to be inserted, if omited the string will be inserted in a new line at the end of the file")
+	RootCmd.PersistentFlags().IntVarP(&line, "line", "l", -1, "Line where the string is going to be inserted, if omited the string will be inserted \n in a new line at the end of the file. Count starts at 1.")
+	RootCmd.PersistentFlags().StringVarP(&text, "text", "t", "", "The to insert into file")
 }
 
 // initConfig reads in config file and ENV variables if set.

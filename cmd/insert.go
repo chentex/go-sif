@@ -35,23 +35,13 @@ this command will, when executed correctly, insert the string in the file 'testf
 $ go-sif insert -f testfile string to insert in the file
 
 this command will, when executed correctly, insert the string at the end of file 'testfile' in line a new line`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO: Work your own magic here
 		fmt.Println("insert called")
+		return nil
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(insertCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// insertCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// insertCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }
