@@ -18,7 +18,7 @@ deploy:
   file:
     - "build/dist/gosif.darwin-amd64.tar.gz"
     - "build/dist/gosif.linux-amd64.tar.gz"
-  skip_cleanup:true
+  skip_cleanup: true
   on:
     repo: chentex/go-sif
     tags: true
