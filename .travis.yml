@@ -1,0 +1,24 @@
+language: go
+go:
+- 1.9
+before_install:
+- sudo add-apt-repository ppa:masterminds/glide -y
+- sudo apt-get update -q
+- sudo apt-get install glide -y
+install:
+- make install_dependencies
+script:
+- make test
+- make package-darwin
+- make package-linux
+deploy:
+  provider: releases
+  api_key:
+    secure: epQQuD4y6dO8vqdOCLzK6CPxDe56DnJZfERSCGTheaSyKLlYC96Lxdo1bRNBbwYzVoy2NzedW8vFDsmXDdOzjd1vhIP1axPzA0/OTs80S9yZUazynji+GdxDEfmvEwrzLyy6xu5btg2G1kKhgecqrINS8Va+bzw9PDPX3YZMNit4AeB8CK+EwJZsIiUNvYSsaGWOHuX5ZMgEBikjT4uA1FLmhajxow+jsQKc/zCSbIbrUKcyRECWb6csfu1WS5h27oRTXXY/e0K/asnPkC4arhoJLw7tbqXao/h5HFnSHZzJVmJnFEfgaVJ+I3Fp+P9BaILBUCYJwh/hyoFvblN7aIKtej56FIvdwHlYjSK/fGG+c9kY8w2rSr2YUZlZZ8sfcqcgLIQalZpp4P3l6C8g9rx9RKgToGNsSt0PsRHLx/fIlhzF8sCmxjkfPav/kbrmSF1aQVpy3a0a+sILx0xCVvsD4Skp2fbOgIjca2VtguBnATcVWv5Wo9JtRqSX9fYERjVLL/ruCs0VvmbCxnGO76feNuoPt4DSR8TFHF+BpV+2qH66UTyztkC2TylG/CCw6oa7Sxo7a8flfpy1I88CTk+ts0lsavj8ErZIE3ps4YSKJIGzcf2+pC7FIDB1kCyLOYECIWqBMp5CMpTcdxf/dnU5NKdSZSBc8XU2ofMZiAE=
+  file:
+    - "build/dist/gosif.darwin-amd64.tar.gz"
+    - "build/dist/gosif.linux-amd64.tar.gz"
+  skip_cleanup: true
+  on:
+    repo: chentex/go-sif
+    tags: true
