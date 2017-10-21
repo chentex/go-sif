@@ -15,8 +15,8 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/chentex/go-sif/service"
+	"github.com/chentex/go-sif/service/io"
 	"github.com/spf13/cobra"
 )
 
@@ -25,6 +25,7 @@ var insertCmd = &cobra.Command{
 	Use:   "insert",
 	Short: "go-sif insert will insert a string into a file of your choice",
 	Long: `go-sif insert will insert a string into a file of your choice
+Line count starts at 1.
 
 You can specify a specific line number. For example:
 
@@ -36,9 +37,11 @@ $ go-sif insert -f testfile string to insert in the file
 
 this command will, when executed correctly, insert the string at the end of file 'testfile' in line a new line`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		// TODO: Work your own magic here
-		fmt.Println("insert called")
-		return nil
+		insertService := service.NewInsertService()
+		fm := io.NewFileManager()
+		insertService.SetManager(fm)
+		err := insertService.Insert(file, line, text)
+		return err
 	},
 }
 
