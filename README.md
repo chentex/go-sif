@@ -4,6 +4,7 @@ String Into File: Insert strings into a file in a given line.
 
 
 [![Build Status](https://travis-ci.org/chentex/go-sif.svg)](https://travis-ci.org/chentex/go-sif)
+[![codecov](https://codecov.io/gh/chentex/go-sif/branch/master/graph/badge.svg)](https://codecov.io/gh/chentex/go-sif/branch/master)
 [![GoDoc](https://godoc.org/github.com/chentex/go-sif?status.svg)](https://godoc.org/github.com/chentex/go-sif)
 [![Go Report Card](https://goreportcard.com/badge/github.com/chentex/go-sif)](https://goreportcard.com/report/github.com/chentex/go-sif)
 
