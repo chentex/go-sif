@@ -27,7 +27,7 @@ install_dependencies:
 	glide install
 
 cover:
-	gocov test $(SOURCE_DIRS) | gocov-html > coverage.html && open coverage.html
+	@bash cover.sh
 
 binaries: binary-darwin binary-linux
 

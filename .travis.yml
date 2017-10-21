@@ -12,6 +12,7 @@ script:
 - make package-darwin
 - make package-linux
 after_success:
+  - make cover
   - bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: releases
