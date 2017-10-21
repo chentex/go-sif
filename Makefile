@@ -1,6 +1,6 @@
 # Meta info
 NAME := gosif
-VERSION := v0.1.0
+VERSION := v0.2.0
 MAINTAINER := "Vicente Zepeda <chente.z.m@gmail.com"
 # LD Flags
 DATE := $(shell date -u +%Y%m%d.%H%M%S)
