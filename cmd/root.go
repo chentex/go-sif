@@ -29,10 +29,10 @@ var (
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use: `go-sif [command]
-go-sif [flags]`,
-	Short: "go-sif inserts a string into a file",
-	Long:  `go-sif is made to ease the way you insert string into files.`,
+	Use: `gosif [command]
+gosif [flags]`,
+	Short: "gosif inserts a string into a file",
+	Long:  `gosif is made to ease the way you insert string into files.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) {},
@@ -50,7 +50,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 	RootCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "The file where you want to insert the string")
-	RootCmd.PersistentFlags().IntVarP(&line, "line", "l", -1, "Line where the string is going to be inserted, if omited the string will be inserted \n in a new line at the end of the file. Count starts at 1.")
+	RootCmd.PersistentFlags().IntVarP(&line, "line", "l", -1, "Line where the string is going to be inserted, if omitted the string will be inserted \n in a new line at the end of the file. Count starts at 1.")
 	RootCmd.PersistentFlags().StringVarP(&text, "text", "t", "", "The to insert into file")
 }
 
@@ -60,9 +60,9 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	}
 
-	viper.SetConfigName(".go-sif") // name of config file (without extension)
-	viper.AddConfigPath("$HOME")   // adding home directory as first search path
-	viper.AutomaticEnv()           // read in environment variables that match
+	viper.SetConfigName(".gosif") // name of config file (without extension)
+	viper.AddConfigPath("$HOME")  // adding home directory as first search path
+	viper.AutomaticEnv()          // read in environment variables that match
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
